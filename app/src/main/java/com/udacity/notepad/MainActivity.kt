@@ -1,79 +1,56 @@
-package com.udacity.notepad;
+package com.udacity.notepad
 
-import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import com.udacity.notepad.crud.CreateActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.udacity.notepad.util.SpaceItemDecoration
+import com.udacity.notepad.recycler.NotesAdapter
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
-import com.udacity.notepad.crud.CreateActivity;
-import com.udacity.notepad.recycler.NotesAdapter;
-import com.udacity.notepad.util.SpaceItemDecoration;
+class MainActivity : AppCompatActivity() {
 
-public class MainActivity extends AppCompatActivity {
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
+        fab.setOnClickListener { startActivity(CreateActivity.get(this@MainActivity)) }
 
-    private RecyclerView recycler;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(CreateActivity.get(MainActivity.this));
-            }
-        });
-
-        recycler = findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-        recycler.addItemDecoration(new SpaceItemDecoration(this, R.dimen.margin_small));
-        recycler.setAdapter(new NotesAdapter(this));
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.addItemDecoration(SpaceItemDecoration(this, R.dimen.margin_small))
+        recycler.adapter = NotesAdapter(this)
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refresh();
+    override fun onResume() {
+        super.onResume()
+        refresh()
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        recycler.setAdapter(null);
+    public override fun onDestroy() {
+        super.onDestroy()
+        recycler!!.adapter = null
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-
-    private void refresh() {
-        ((NotesAdapter) recycler.getAdapter()).refresh();
+    private fun refresh() {
+        (recycler!!.adapter as NotesAdapter?)!!.refresh()
     }
 }

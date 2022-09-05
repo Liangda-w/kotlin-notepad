@@ -1,14 +1,12 @@
-package com.udacity.notepad;
+package com.udacity.notepad
 
-import android.app.Application;
+import android.app.Application
+import com.udacity.notepad.data.DataStore.init
+import com.udacity.notepad.data.DataStore
 
-import com.udacity.notepad.data.DataStore;
-
-public class NotesApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        DataStore.init(this);
+class NotesApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        init(this)
     }
 }

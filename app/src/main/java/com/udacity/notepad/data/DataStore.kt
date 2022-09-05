@@ -1,27 +1,24 @@
-package com.udacity.notepad.data;
+package com.udacity.notepad.data
 
-import android.content.Context;
+import android.content.Context
+import com.udacity.notepad.data.NoteDatabase
+import com.udacity.notepad.data.DataStore
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+object DataStore {
+    val EXEC: Executor = Executors.newSingleThreadExecutor()
+    @JvmStatic
+    lateinit var notes: NoteDatabase
+        private set
 
-public final class DataStore {
-
-    private DataStore() {}
-
-    public static final Executor EXEC = Executors.newSingleThreadExecutor();
-
-    private static NoteDatabase notes;
-
-    public static void init(Context context) {
-        notes = new NoteDatabase(context);
+    @JvmStatic
+    fun init(context: Context?) {
+        notes = NoteDatabase(context)
     }
 
-    public static NoteDatabase getNotes() {
-        return notes;
-    }
-
-    public static void execute(Runnable runnable) {
-        EXEC.execute(runnable);
+    @JvmStatic
+    fun execute(runnable: Runnable?) {
+        EXEC.execute(runnable)
     }
 }

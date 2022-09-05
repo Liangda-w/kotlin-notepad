@@ -1,26 +1,18 @@
-package com.udacity.notepad.data;
+package com.udacity.notepad.data
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context
+import android.database.sqlite.SQLiteOpenHelper
+import android.database.sqlite.SQLiteDatabase
+import com.udacity.notepad.data.NotesContract.SQL_CREATE_ENTRIES
+import com.udacity.notepad.data.NotesContract.SQL_DELETE_ENTRIES
 
-import static com.udacity.notepad.data.NotesContract.SQL_CREATE_ENTRIES;
-import static com.udacity.notepad.data.NotesContract.SQL_DELETE_ENTRIES;
-
-public class NotesOpenHelper extends SQLiteOpenHelper {
-
-    public NotesOpenHelper(Context context) {
-        super(context, "notes.db", null, 1);
+class NotesOpenHelper(context: Context?) : SQLiteOpenHelper(context, "notes.db", null, 1) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL(SQL_CREATE_ENTRIES)
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL(SQL_DELETE_ENTRIES)
+        onCreate(db)
     }
 }
